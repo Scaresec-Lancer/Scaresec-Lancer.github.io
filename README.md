@@ -1,1 +1,3 @@
-# Scaresec-Lancer.github.io
+# Headline
+
+> An awesome project.
