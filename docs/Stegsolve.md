@@ -1,6 +1,6 @@
 # Stegsolve：跨平台图片通道查看器
 
-[下载Stegsolve](http：//www.caesum.com/handbook/Stegsolve.jar) | 配置Java环境
+[下载Stegsolve](http://www.caesum.com/handbook/Stegsolve.jar) | 配置Java环境
 
 > StegSolve是一款基于Java开发的流行图片隐写分析软件，该工具不仅可以自动分析图片格式，得出隐藏在文件头、文件块、文件末尾等处的冗余信息，还可以按位查看图片，分析其中的隐藏内容，也支持双图比较，用于得出图片差隐藏的信息。对于动态图片，StegSolve 可以将其分解为单帧保存查看，是一款用于隐写图片分析的强大工具。
 
