@@ -1,6 +1,4 @@
-![logo](https://docsify.js.org/_media/icon.svg)
-
-# HTU_CTF_WIKI
+![logo](https://www.htu.edu.cn/_upload/tpl/0e/b9/3769/template3769/images/hnlogo.png)
 
 > 使用Docsify + Github page搭建的WIKI.
 
