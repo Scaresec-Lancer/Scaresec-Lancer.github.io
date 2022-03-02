@@ -1,4 +1,5 @@
 * [首页](/?id=htu_ctf_wiki)
 * [Misc](/docs/misc.md)
   * [Stegsolve](/docs/Stegsolve.md)
+  * [从源码到可执行文件](/docs/Elf.md)
 * [Ubuntu换源](/docs/Ubuntu.md)
