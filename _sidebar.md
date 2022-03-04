@@ -1,6 +1,7 @@
 * [首页](/?id=htu_ctf_wiki)
 * [Pwn](/docs/Pwn.md)
   * [ret2text](/docs/ret2text.md)
+  * [ret2syscall](/docs/ret2syscall.md)
   * [从源码到可执行文件](/docs/Elf.md)
   * [Kali Linux安装Docker](/docs/Docker.md)
 * [Ubuntu换源](/docs/Ubuntu.md)
