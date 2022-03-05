@@ -2,6 +2,7 @@
 * Pwn学习之路
   * [ret2text](/docs/ret2text.md)
   * [ret2syscall](/docs/ret2syscall.md)
+  * [ret2libc](/docs/ret2libc.md)
 * 基础
   * [从源码到可执行文件](/docs/Elf.md)
 * 未分类
