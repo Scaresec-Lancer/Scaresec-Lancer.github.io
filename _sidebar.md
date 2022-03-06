@@ -9,3 +9,4 @@
   * [Stegsolve](/docs/Stegsolve.md)
   * [Ubuntu换源](/docs/Ubuntu.md)
   * [Kali Linux安装Docker](/docs/Docker.md)
+  * [重复元素的排列](/docs/pailie.md)
