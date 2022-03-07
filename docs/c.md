@@ -1,5 +1,9 @@
 # C函数调用与栈帧分析
 
+> 文章引用自[Cyberangel](https://www.yuque.com/cyberangel/rg9gdm/gcz7x2)，有一些修改，使用intel语法
+
+---
+
 **栈介绍**
 
 > 栈（Stack）是一种后进先出的数据结构，两种基本操作：push将元素压入栈，pop将元素出栈。栈指针esp指向栈顶元素，ebp指向栈底元素。
