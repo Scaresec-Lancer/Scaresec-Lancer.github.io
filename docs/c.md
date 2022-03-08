@@ -115,4 +115,4 @@ _MyFunction:
 
 ![](../pic/4.jpg)
 
-> 上一篇：[段、堆、栈介绍](/docs/ddz.md)		下一篇：无
+> 上一篇：[段、堆、栈介绍](/docs/ddz.md)		下一篇：[Linux ELF的保护](/docs/nx.md)
