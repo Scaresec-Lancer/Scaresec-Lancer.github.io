@@ -32,3 +32,65 @@ r.interactive()	#将控制权交给用户
 context(os='linux', arch='amd64', log_level='debug')
 ```
 
+
+
+**数据打包**
+
+```python
+payload=p32(0xdeadbeef) #将整数打包为32位，对应64位p64，解包用u32/u64
+```
+
+
+
+**数据输出**
+
+pwntools自带数据输出
+
+```python
+some_str="hello,world"
+log.info(some_str)
+```
+
+
+
+**Cyclic Pattern**
+
+生成字符串填入，方便计算溢出距离
+
+```python
+cyclic(0x100) # 生成一个0x100大小的pattern，即一个特殊的字符串
+cyclic_find(0x61616161) # 找到该数据在pattern中的位置（或者是cyclic -l 0x61616161 ）
+cyclic_find('aaaa') # 查找位置也可以使用字符串去定位
+```
+
+
+
+**汇编与shellcode**
+
+各平台shellcode不同，尤其是32位和64位，所以先设置context
+
+```python
+print(shellcraft.sh()) # 打印出shellcode
+print(asm(shellcraft.sh())) # 打印出汇编后的shellcode
+```
+
+
+
+**ELF文件操作**
+
+```python
+>>> e = ELF('/bin/cat')
+>>> print hex(e.address)  # 文件装载的基地址
+0x400000
+>>> print hex(e.symbols['write']) # 函数地址,symbols,got,plt均是列表
+0x401680
+>>> print hex(e.got['write']) # GOT表的地址
+0x60b070
+>>> print hex(e.plt['write']) # PLT的地址
+0x401680
+>>> print hex(e.search('/bin/sh').next())# 字符串/bin/sh的地址字符串加（）
+```
+
+
+
+> 上一篇：[PLT和GOT](/docs/got.md)		下一篇：PIE与ASLR
