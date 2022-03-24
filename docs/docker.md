@@ -194,3 +194,33 @@ docker cp /www/runoob 96f7f14e99ab:/www
 ```
 docker cp  96f7f14e99ab:/www /tmp/
 ```
+
+
+
+# 5、容器服务
+
+## 1. 登录阿里云Docker Registry
+
+```
+$ docker login --username=louis.joker@qq.com registry.cn-hangzhou.aliyuncs.com
+```
+
+用于登录的用户名为阿里云账号全名，密码为开通服务时设置的密码。
+
+您可以在访问凭证页面修改凭证密码。
+
+## 2. 从Registry中拉取镜像
+
+```
+$ docker pull registry.cn-hangzhou.aliyuncs.com/dogge/myub:[镜像版本号]
+```
+
+## 3. 将镜像推送到Registry
+
+```
+$ docker login --username=louis.joker@qq.com registry.cn-hangzhou.aliyuncs.com
+$ docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/dogge/myub:[镜像版本号]
+$ docker push registry.cn-hangzhou.aliyuncs.com/dogge/myub:[镜像版本号]
+```
+
+请根据实际镜像信息替换示例中的[ImageId]和[镜像版本号]参数。
