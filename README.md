@@ -8,3 +8,5 @@
 
 
 
+## [花式栈溢出技巧 Stack-smash](/docs/smash.md)
+
