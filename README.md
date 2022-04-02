@@ -10,3 +10,6 @@
 
 ## [花式栈溢出技巧 Stack-smash](/docs/smash.md)
 
+
+
+## [BUUCTF ciscn_2019_c_1](/docs/ciscn_2019_c_1)

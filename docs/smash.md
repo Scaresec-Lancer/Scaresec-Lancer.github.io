@@ -2,11 +2,9 @@
 
 ## 原理
 
-Stack-smash可以绕过Canary保护
+栈溢出会将Canary一起覆盖，程序报错后执行`__stack_chk_fail()`，将`argv[0]`（第一个参数，程序名）输出。
 
-正常栈溢出时会连Canary一起覆盖，程序报错，执行`__stack_chk_fail()`将`argv[0]`（程序的第一个参数，也就是程序名）输出。
-
-如果利用栈溢出使argv[0]指向flag，就可以利用Canary报错信息得到flag
+如果利用栈溢出使argv[0]指向flag地址，就可以利用Canary的报错信息输出flag
 
 
 
