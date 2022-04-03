@@ -16,3 +16,7 @@
 ## 2022.04.02
 
 - 在BUUCTF做题，梳理下[ciscn_2019_c_1](/docs/ciscn_2019_c_1.md)和[第五空间2019PWN](/docs/pwn5.md)这两道题
+
+## 2022.04.03
+
+- 在BUUCTF做题，做了[babyrop](/docs/babyrop.md)，但是没成功
