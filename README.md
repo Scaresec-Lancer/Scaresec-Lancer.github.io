@@ -60,6 +60,10 @@
 
 
 
+## [bjdctf_2020_babystack2](/docs/bjdctf_2020_babystack2.md)
+
+
+
 ---
 
 - [豫ICP备20022428号](https://beian.miit.gov.cn/)
