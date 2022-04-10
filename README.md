@@ -44,6 +44,14 @@
 
 
 
+## [other_shellcode](/docs/other_shellcode.md)
+
+
+
+## [ciscn_2019_ne_5](/docs/ciscn_2019_ne_5.md)
+
+
+
 ---
 
 - [豫ICP备20022428号](https://beian.miit.gov.cn/)
