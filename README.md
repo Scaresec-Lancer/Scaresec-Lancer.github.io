@@ -44,7 +44,7 @@
 
 
 
-## [other_shellcode](/docs/other_shellcode.md)
+## [others_shellcode](/docs/others_shellcode.md)
 
 
 
