@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-22a39d25","path":"/about.html","title":"关于我","lang":"zh-CN","frontmatter":{},"excerpt":"","headers":[{"level":2,"title":"音乐","slug":"音乐","link":"#音乐","children":[]},{"level":2,"title":"游戏","slug":"游戏","link":"#游戏","children":[]}],"git":{},"filePathRelative":"about.md"}');export{e as data};
