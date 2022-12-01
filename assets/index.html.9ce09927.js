@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-8daa1a0e","path":"/","title":"利用 IPv6 访问家庭内网","lang":"zh-CN","frontmatter":{},"excerpt":"","headers":[{"level":2,"title":"步骤","slug":"步骤","link":"#步骤","children":[]}],"git":{},"filePathRelative":"README.md"}');export{e as data};
