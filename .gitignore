@@ -1,3 +1,4 @@
-.cache
-config.js
-.temp
+node_modules
+src
+package.json
+package-lock.json
